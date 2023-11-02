@@ -114,6 +114,7 @@ $RECYCLE.BIN/
 *.ipr
 application.properties
 application-test.properties
+springblog.jks
 
 ### NetBeans ###
 /nbproject/private/
