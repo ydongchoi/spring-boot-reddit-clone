@@ -13,6 +13,8 @@ import com.example.springredditclone.repository.SubredditRepository;
 import com.example.springredditclone.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.metadata.PostgresCallMetaDataProvider;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -41,8 +43,9 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> getAllPosts(){
-        return postRepository.findAll()
+    public List<PostResponse> getAllPosts(int page, int size){
+        Pageable paging = PageRequest.of(page, size);
+        return postRepository.findAll(paging)
                 .stream()
                 .map(postMapper::mapToDto)
                 .collect(Collectors.toList());

@@ -26,8 +26,8 @@ public class PostController {
         }
 
         @GetMapping
-        public ResponseEntity<List<PostResponse>> getAllPosts(){
-            return status(HttpStatus.OK).body(postService.getAllPosts());
+        public ResponseEntity<List<PostResponse>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size){
+            return status(HttpStatus.OK).body(postService.getAllPosts(page, size));
         }
 
         @GetMapping("/{id}")

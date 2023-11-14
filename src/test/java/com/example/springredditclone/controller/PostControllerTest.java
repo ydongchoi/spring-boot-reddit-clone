@@ -40,7 +40,7 @@ public class PostControllerTest {
         PostResponse postRequest2 = new PostResponse(2L, "Post Name2", "http://url2.site2", "Description2",
                 "User 2", "Subreddit Name2", 0, 0, "2 day ago");
 
-        Mockito.when(postService.getAllPosts()).thenReturn(asList(postRequest1, postRequest2));
+        Mockito.when(postService.getAllPosts(1,3)).thenReturn(asList(postRequest1, postRequest2));
 
         mockMvc.perform(get("/api/posts/"))
                 .andExpect(status().is(200))
