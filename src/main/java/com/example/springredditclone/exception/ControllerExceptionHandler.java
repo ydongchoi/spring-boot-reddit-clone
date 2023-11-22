@@ -13,14 +13,16 @@ import java.util.Date;
 @ControllerAdvice
 @ResponseBody
 public class ControllerExceptionHandler {
-    @ExceptionHandler({PostNotFoundException.class, SpringRedditException.class, SubredditNotFoundException.class})
+
+    @ExceptionHandler({PostNotFoundException.class, SpringRedditException.class,
+        SubredditNotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ErrorMessage postNotFountException(PostNotFoundException ex, WebRequest request){
+    public ErrorMessage postNotFountException(PostNotFoundException ex, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
-                HttpStatus.NOT_FOUND.value(),
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false));
+            HttpStatus.NOT_FOUND.value(),
+            new Date(),
+            ex.getMessage(),
+            request.getDescription(false));
 
         return message;
     }

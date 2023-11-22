@@ -17,32 +17,33 @@ import static org.springframework.http.ResponseEntity.status;
 @AllArgsConstructor
 public class PostController {
 
-        private  final PostService postService;
+    private final PostService postService;
 
-        @PostMapping
-        public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest){
-            postService.save(postRequest);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
+    @PostMapping
+    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
+        postService.save(postRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
-        @GetMapping
-        public ResponseEntity<List<PostResponse>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size){
-            return status(HttpStatus.OK).body(postService.getAllPosts(page, size));
-        }
+    @GetMapping
+    public ResponseEntity<List<PostResponse>> getAllPosts(
+        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1") int size) {
+        return status(HttpStatus.OK).body(postService.getAllPosts(page, size));
+    }
 
-        @GetMapping("/{id}")
-        public ResponseEntity<PostResponse> getPost(@PathVariable Long id){
-            return status(HttpStatus.OK).body(postService.getPost(id));
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
+        return status(HttpStatus.OK).body(postService.getPost(id));
+    }
 
-        @GetMapping("by-subreddit/{id}")
-        public ResponseEntity<List<PostResponse>> getPostsBySubreddit(@PathVariable Long id){
-            return status(HttpStatus.OK).body(postService.getPostsBySubreddit(id));
-        }
+    @GetMapping("by-subreddit/{id}")
+    public ResponseEntity<List<PostResponse>> getPostsBySubreddit(@PathVariable Long id) {
+        return status(HttpStatus.OK).body(postService.getPostsBySubreddit(id));
+    }
 
-        @GetMapping("by-user/{username}")
-        public ResponseEntity<List<PostResponse>> getPostByUsername(@PathVariable String username){
-            return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
-        }
+    @GetMapping("by-user/{username}")
+    public ResponseEntity<List<PostResponse>> getPostByUsername(@PathVariable String username) {
+        return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
+    }
 
 }

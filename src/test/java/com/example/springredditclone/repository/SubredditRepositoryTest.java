@@ -29,16 +29,19 @@ class SubredditRepositoryTest {
     @Test
     void findByName() {
         //Given
-        User user = new User(123L, "test user", "secret password", "user@email.com", Instant.now(), true);
+        User user = new User(123L, "test user", "secret password", "user@email.com", Instant.now(),
+            true);
         user = entityManager.merge(user);
 
-        Post post = new Post(1234L, "First Post", "http://url.site", "Test", 0, user, Instant.now(), null);
+        Post post = new Post(1234L, "First Post", "http://url.site", "Test", 0, user, Instant.now(),
+            null);
         post = entityManager.merge(post);
 
         List<Post> listPost = new ArrayList<>();
         listPost.add(post);
 
-        Subreddit expectedSubreddit = new Subreddit(null, "Subreddit", "Description", listPost, Instant.now(), user);
+        Subreddit expectedSubreddit = new Subreddit(null, "Subreddit", "Description", listPost,
+            Instant.now(), user);
         entityManager.merge(expectedSubreddit);
 
         //When

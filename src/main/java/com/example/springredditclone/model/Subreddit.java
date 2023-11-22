@@ -16,11 +16,12 @@ import java.util.List;
 @Entity
 @Builder
 public class Subreddit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotBlank(message = "Community name is required")
-    private  String name;
+    private String name;
     @NotBlank(message = "Description is required")
     private String description;
     @OneToMany(fetch = FetchType.LAZY)

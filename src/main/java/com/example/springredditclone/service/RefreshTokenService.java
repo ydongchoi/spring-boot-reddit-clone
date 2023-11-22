@@ -26,12 +26,12 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
-    void validateRefreshToken(String token){
+    void validateRefreshToken(String token) {
         refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new SpringRedditException("Invalid refresh Token"));
+            .orElseThrow(() -> new SpringRedditException("Invalid refresh Token"));
     }
 
-    public void deleteRefreshToken(String token){
+    public void deleteRefreshToken(String token) {
         refreshTokenRepository.deleteByToken(token);
     }
 

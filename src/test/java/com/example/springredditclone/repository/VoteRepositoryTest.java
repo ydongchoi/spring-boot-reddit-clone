@@ -28,20 +28,22 @@ class VoteRepositoryTest {
     private VoteRepository voteRepository;
 
     @Test
-    public void shouldFindTopByPostAndUserOrderByVoteIdDesc(){
+    public void shouldFindTopByPostAndUserOrderByVoteIdDesc() {
         // Given
-        User user = new User(123L, "test user", "secret password", "user@email.com", Instant.now(), true);
+        User user = new User(123L, "test user", "secret password", "user@email.com", Instant.now(),
+            true);
         user = entityManager.merge(user);
 
-        Post post = new Post(1234L, "First Post", "http://url.site", "Test",
-                0, user, Instant.now(), null);
+        Post post = new Post(1234L, "First Post", "http://url.site", "Test", 0, user, Instant.now(),
+            null);
         post = entityManager.merge(post);
 
         Vote expectedVote1 = new Vote(1L, VoteType.UPVOTE, post, user);
         expectedVote1 = entityManager.merge(expectedVote1);
 
         // When
-        Optional<Vote> actualVote = voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post, user);
+        Optional<Vote> actualVote = voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post,
+            user);
 
         // Then
         assertThat(actualVote).isPresent();

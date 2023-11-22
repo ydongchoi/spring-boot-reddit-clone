@@ -29,14 +29,14 @@ class CommentRepositoryTest {
     void shouldFindByPost() {
         //Given
         User user = new User(123L, "test user", "secret password", "user@email.com",
-                Instant.now(), true);
+            Instant.now(), true);
         user = entityManager.merge(user);
 
         Post post = new Post(1234L, "First Post", "http://url.site", "Test",
-                0, user, Instant.now(), null);
+            0, user, Instant.now(), null);
         post = entityManager.merge(post);
 
-        Comment expectedComment = new Comment(123L, "Comment", post,Instant.now(), user);
+        Comment expectedComment = new Comment(123L, "Comment", post, Instant.now(), user);
         expectedComment = entityManager.merge(expectedComment);
 
         //When
@@ -51,14 +51,14 @@ class CommentRepositoryTest {
     void shouldFindAllByUser() {
         //Given
         User user = new User(123L, "test user", "secret password", "user@email.com",
-                Instant.now(), true);
+            Instant.now(), true);
         user = entityManager.merge(user);
 
         Post post = new Post(1234L, "First Post", "http://url.site", "Test",
-                0, user, Instant.now(), null);
+            0, user, Instant.now(), null);
         post = entityManager.merge(post);
 
-        Comment expectedComment = new Comment(123L, "That's Comment", post,Instant.now(), user);
+        Comment expectedComment = new Comment(123L, "That's Comment", post, Instant.now(), user);
         expectedComment = entityManager.merge(expectedComment);
 
         //When

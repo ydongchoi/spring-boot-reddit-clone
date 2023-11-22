@@ -17,17 +17,17 @@ public class SubredditController {
     private final SubredditService subredditService;
 
     @GetMapping
-    public List<SubredditDto> getAllSubreddits(){
+    public List<SubredditDto> getAllSubreddits() {
         return subredditService.getAll();
     }
 
     @GetMapping("/{id}")
-    public SubredditDto getSubreddit(@PathVariable Long id){
+    public SubredditDto getSubreddit(@PathVariable Long id) {
         return subredditService.getSubreddit(id);
     }
 
     @PostMapping
-    public  SubredditDto create(@RequestBody @Valid SubredditDto subredditDto){
+    public SubredditDto create(@RequestBody @Valid SubredditDto subredditDto) {
         return subredditService.save(subredditDto);
     }
 

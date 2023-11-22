@@ -36,42 +36,42 @@ public class PostService {
     private final PostMapper postMapper;
 
     @Transactional(readOnly = true)
-    public PostResponse getPost(Long id){
+    public PostResponse getPost(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostNotFoundException(id.toString()));
+            .orElseThrow(() -> new PostNotFoundException(id.toString()));
         return postMapper.mapToDto(post);
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> getAllPosts(int page, int size){
+    public List<PostResponse> getAllPosts(int page, int size) {
         Pageable paging = PageRequest.of(page, size);
         return postRepository.findAll(paging)
-                .stream()
-                .map(postMapper::mapToDto)
-                .collect(Collectors.toList());
+            .stream()
+            .map(postMapper::mapToDto)
+            .collect(Collectors.toList());
     }
 
-    public void save(PostRequest postRequest){
+    public void save(PostRequest postRequest) {
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
-                .orElseThrow(() -> new SubredditNotFoundException(postRequest.getSubredditName()));
+            .orElseThrow(() -> new SubredditNotFoundException(postRequest.getSubredditName()));
         postRepository.save(postMapper.map(postRequest, subreddit, authService.getCurrentUser()));
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> getPostsBySubreddit(Long subredditId){
+    public List<PostResponse> getPostsBySubreddit(Long subredditId) {
         Subreddit subreddit = subredditRepository.findById(subredditId)
-                .orElseThrow(() -> new SubredditNotFoundException(subredditId.toString()));
+            .orElseThrow(() -> new SubredditNotFoundException(subredditId.toString()));
         List<Post> posts = postRepository.findAllBySubreddit(subreddit);
         return posts.stream().map(postMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> getPostsByUsername(String username){
+    public List<PostResponse> getPostsByUsername(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+            .orElseThrow(() -> new UsernameNotFoundException(username));
         return postRepository.findByUser(user)
-                .stream()
-                .map(postMapper::mapToDto)
-                .collect(Collectors.toList());
+            .stream()
+            .map(postMapper::mapToDto)
+            .collect(Collectors.toList());
     }
 }

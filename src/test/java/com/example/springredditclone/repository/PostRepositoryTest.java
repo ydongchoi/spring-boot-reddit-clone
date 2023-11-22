@@ -34,21 +34,22 @@ class PostRepositoryTest extends BaseTest {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired SubredditRepository subredditRepository;
+    @Autowired
+    SubredditRepository subredditRepository;
 
     @Test
     @DisplayName("Should save one post")
-    public void shouldSavePost(){
+    public void shouldSavePost() {
         Post expectedPostObjecct = new Post(null, "First Post", "http://url.site", "Test",
-                0, null, Instant.now(), null);
+            0, null, Instant.now(), null);
         Post actualPostObject = postRepository.save(expectedPostObjecct);
 
         assertThat(actualPostObject).usingRecursiveComparison()
-                .ignoringFields("postId").isEqualTo(expectedPostObjecct);
+            .ignoringFields("postId").isEqualTo(expectedPostObjecct);
     }
 
     @Test
-    public void shouldFindNoPostIfRepositorytIsEmpty(){
+    public void shouldFindNoPostIfRepositorytIsEmpty() {
         Pageable paging = PageRequest.of(0, 3);
         Iterable postLsit = postRepository.findAll(paging);
 
@@ -56,22 +57,23 @@ class PostRepositoryTest extends BaseTest {
     }
 
     @Test
-    public void shouldFindAll(){
+    public void shouldFindAll() {
         Post expectedPostObject1 = new Post(null, "First Post", "http://url.site", "Test",
-                0, null, Instant.now(), null);
+            0, null, Instant.now(), null);
         entityManager.persist(expectedPostObject1);
 
         Post expectedPostObject2 = new Post(null, "Second Post", "http://url.site", "Test",
-                0, null, Instant.now(), null);
+            0, null, Instant.now(), null);
         entityManager.persist(expectedPostObject2);
 
         Post expectedPostObject3 = new Post(null, "Third Post", "http://url.site", "Test",
-                0, null, Instant.now(), null);
+            0, null, Instant.now(), null);
         entityManager.persist(expectedPostObject3);
 
         Pageable paging = PageRequest.of(0, 3);
         Iterable actualPostList = postRepository.findAll(paging);
 
-        assertThat(actualPostList).hasSize(3).contains(expectedPostObject1, expectedPostObject2, expectedPostObject3);
+        assertThat(actualPostList).hasSize(3)
+            .contains(expectedPostObject1, expectedPostObject2, expectedPostObject3);
     }
 }

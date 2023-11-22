@@ -21,24 +21,26 @@ public class SubredditService {
     private final SubredditMapper subredditMapper;
 
     @Transactional(readOnly = true)
-    public List<SubredditDto> getAll(){
+    public List<SubredditDto> getAll() {
         return subredditRepository.findAll()
-                .stream()
-                .map(subredditMapper::mapSubredditToDto)
-                .collect(Collectors.toList());
+            .stream()
+            .map(subredditMapper::mapSubredditToDto)
+            .collect(Collectors.toList());
     }
 
     @Transactional
-    public SubredditDto save(SubredditDto subredditDto){
-        Subreddit subreddit = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDto));
+    public SubredditDto save(SubredditDto subredditDto) {
+        Subreddit subreddit = subredditRepository.save(
+            subredditMapper.mapDtoToSubreddit(subredditDto));
         subredditDto.setId(subreddit.getId());
         return subredditDto;
     }
 
     @Transactional(readOnly = true)
-    public SubredditDto getSubreddit(Long id){
+    public SubredditDto getSubreddit(Long id) {
         Subreddit subreddit = subredditRepository.findById(id)
-                .orElseThrow(() -> new SubredditNotFoundException("Subreddit not found with id - " + id));
+            .orElseThrow(
+                () -> new SubredditNotFoundException("Subreddit not found with id - " + id));
         return subredditMapper.mapSubredditToDto(subreddit);
     }
 }

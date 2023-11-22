@@ -47,7 +47,7 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
 
     @Transactional
-    public void signup(RegisterRequest registerRequest){
+    public void signup(RegisterRequest registerRequest) {
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
@@ -58,24 +58,26 @@ public class AuthService {
         userRepository.save(user);
 
         String token = generateVerificationToken(user);
-        String message = mailContentBuilder.build("Thank you for signing up to Spring Reddit, please click on the" +
-                        " below url to activate your account : "
-                        + ACTIVATION_EMAIL + "/" + token);
+        String message = mailContentBuilder.build(
+            "Thank you for signing up to Spring Reddit, please click on the" +
+                " below url to activate your account : "
+                + ACTIVATION_EMAIL + "/" + token);
 
-        mailService.sendMail(new NotificationEmail("Please Activate your account", user.getEmail(), message));
+        mailService.sendMail(
+            new NotificationEmail("Please Activate your account", user.getEmail(), message));
     }
 
     @Transactional(readOnly = true)
-    User getCurrentUser(){
+    User getCurrentUser() {
         org.springframework.security.core.userdetails.User principal =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder.
-                        getContext().getAuthentication().getPrincipal();
+            (org.springframework.security.core.userdetails.User) SecurityContextHolder.
+                getContext().getAuthentication().getPrincipal();
         return userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found -" +
-                        principal.getUsername()));
+            .orElseThrow(() -> new UsernameNotFoundException("User name not found -" +
+                principal.getUsername()));
     }
 
-    private String generateVerificationToken(User user){
+    private String generateVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
@@ -84,47 +86,49 @@ public class AuthService {
         return token;
     }
 
-    private String encodePassword(String password){
+    private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
 
-    public void verifyAccount(String token){
-        Optional<VerificationToken> verificationTokenOptional = verificationTokenRepository.findByToken(token);
+    public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationTokenOptional = verificationTokenRepository.findByToken(
+            token);
         verificationTokenOptional.orElseThrow(() -> new SpringRedditException("Invalid Token"));
         fetchUserAndEnable(verificationTokenOptional.get());
     }
 
     @Transactional
-    private  void fetchUserAndEnable(VerificationToken verificationToken){
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("" +
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new SpringRedditException("" +
                 "User Not Found with id - " + username));
         user.setEnabled(true);
         userRepository.save(user);
     }
 
-    public AuthenticationResponse login(LoginRequest loginRequest){
+    public AuthenticationResponse login(LoginRequest loginRequest) {
         Authentication authenticate = authenticationManager.authenticate(new
-                UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                loginRequest.getPassword()));
+            UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+            loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
         return AuthenticationResponse.builder()
-                .authenticationToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-                .username(loginRequest.getUsername())
-                .build();
+            .authenticationToken(token)
+            .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+            .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+            .username(loginRequest.getUsername())
+            .build();
     }
 
-    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
         String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
         return AuthenticationResponse.builder()
-                .authenticationToken(token)
-                .refreshToken(refreshTokenRequest.getRefreshToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-                .username(refreshTokenRequest.getUsername())
-                .build();
+            .authenticationToken(token)
+            .refreshToken(refreshTokenRequest.getRefreshToken())
+            .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+            .username(refreshTokenRequest.getUsername())
+            .build();
     }
 }

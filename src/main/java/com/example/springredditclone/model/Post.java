@@ -16,6 +16,7 @@ import java.time.Instant;
 @Entity
 @Builder
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long postId;
@@ -33,5 +34,5 @@ public class Post {
     private Instant createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private Subreddit  subreddit;
+    private Subreddit subreddit;
 }

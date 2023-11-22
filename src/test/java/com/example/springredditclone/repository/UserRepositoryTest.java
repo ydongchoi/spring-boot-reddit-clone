@@ -19,27 +19,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest extends BaseTest {
+
     @Autowired
     private UserRepository userRepository;
     private static User expectedUserObject;
 
     @BeforeAll
-    public static void setup(){
-        expectedUserObject = new User(123L, "test user", "secret password", "user@email.com", Instant.now(), true);
+    public static void setup() {
+        expectedUserObject = new User(123L, "test user", "secret password", "user@email.com",
+            Instant.now(), true);
     }
 
     @Test
-    public void shouldSavePost(){
+    public void shouldSavePost() {
         User actualUserObject = userRepository.save(expectedUserObject);
         assertThat(actualUserObject).usingRecursiveComparison()
-                .ignoringFields("userId").isEqualTo(expectedUserObject);
+            .ignoringFields("userId").isEqualTo(expectedUserObject);
     }
 
     @Test
-    public void shouldFindByUserName(){
+    public void shouldFindByUserName() {
         userRepository.save(expectedUserObject);
         Optional<User> actualUserObject = userRepository.findByUsername("test user");
         assertThat(actualUserObject.get()).usingRecursiveComparison()
-                .ignoringFields("userId").isEqualTo(expectedUserObject);
+            .ignoringFields("userId").isEqualTo(expectedUserObject);
     }
 }

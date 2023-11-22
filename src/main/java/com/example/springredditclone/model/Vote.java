@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 public class Vote {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long voteId;
