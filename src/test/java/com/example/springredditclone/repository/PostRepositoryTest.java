@@ -2,8 +2,6 @@ package com.example.springredditclone.repository;
 
 import com.example.springredditclone.BaseTest;
 import com.example.springredditclone.model.Post;
-import com.example.springredditclone.model.Subreddit;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -71,7 +64,7 @@ class PostRepositoryTest extends BaseTest {
         entityManager.persist(expectedPostObject3);
 
         Pageable paging = PageRequest.of(0, 3);
-        Iterable actualPostList = postRepository.findAll(paging);
+        Iterable<Post> actualPostList = postRepository.findAll(paging);
 
         assertThat(actualPostList).hasSize(3)
             .contains(expectedPostObject1, expectedPostObject2, expectedPostObject3);
