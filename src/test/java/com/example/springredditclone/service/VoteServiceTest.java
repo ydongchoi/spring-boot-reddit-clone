@@ -1,8 +1,7 @@
 package com.example.springredditclone.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.example.springredditclone.dto.VoteDto;
+import com.example.springredditclone.exception.SpringRedditException;
 import com.example.springredditclone.model.Post;
 import com.example.springredditclone.model.User;
 import com.example.springredditclone.model.Vote;
@@ -102,5 +101,27 @@ class VoteServiceTest {
             .isEqualTo(VoteType.DOWNVOTE);
         Assertions.assertThat(postArgumentCaptor.getValue().getVoteCount())
             .isEqualTo(-1);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenVoteFails() {
+        //Given
+        VoteDto voteDto = new VoteDto(VoteType.DOWNVOTE, 123L);
+        User user = new User(12L, "test user", "secret password", "user@email.com",
+            Instant.now(), true);
+        Post post = new Post(123L, "First Post", "http://url.site", "Test",
+            0, user, Instant.now(), null);
+        Vote vote = new Vote(1234L, VoteType.DOWNVOTE, post, user);
+
+        //When
+        Mockito.when(postRepository.findById(123L)).thenReturn(Optional.of(post));
+        Mockito.when(authService.getCurrentUser())
+            .thenReturn(user);
+        Mockito.when(voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post, user))
+            .thenReturn(Optional.of(vote));
+
+        //Then
+        Assertions.assertThatThrownBy(() -> voteService.vote(voteDto))
+            .isInstanceOf(SpringRedditException.class);
     }
 }
