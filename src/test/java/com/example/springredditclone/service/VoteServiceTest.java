@@ -74,4 +74,33 @@ class VoteServiceTest {
         Assertions.assertThat(postArgumentCaptor.getValue().getVoteCount())
             .isEqualTo(1);
     }
+
+    @Test
+    public void shouldVoteWhenDownVoteSuccess() {
+        //Given
+        VoteDto voteDto = new VoteDto(VoteType.DOWNVOTE, 123L);
+        User user = new User(12L, "test user", "secret password", "user@email.com",
+            Instant.now(), true);
+        Post post = new Post(123L, "First Post", "http://url.site", "Test",
+            0, user, Instant.now(), null);
+        Vote vote = new Vote(1234L, VoteType.UPVOTE, post, user);
+
+        //When
+        Mockito.when(postRepository.findById(123L)).thenReturn(Optional.of(post));
+        Mockito.when(authService.getCurrentUser())
+            .thenReturn(user);
+        Mockito.when(voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post, user))
+            .thenReturn(Optional.of(vote));
+
+        voteService.vote(voteDto);
+
+        //Then
+        Mockito.verify(voteRepository, Mockito.times(1)).save(voteArgumentCaptor.capture());
+        Mockito.verify(postRepository, Mockito.times(1)).save(postArgumentCaptor.capture());
+
+        Assertions.assertThat(voteArgumentCaptor.getValue().getVoteType())
+            .isEqualTo(VoteType.DOWNVOTE);
+        Assertions.assertThat(postArgumentCaptor.getValue().getVoteCount())
+            .isEqualTo(-1);
+    }
 }
